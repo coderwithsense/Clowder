@@ -22,9 +22,9 @@ CATs are fungible tokens (e.g. ERC20 tokens) that are used to track the value of
 The platform's frontend has the following pages:
 
 * **Landing Page**: this page has a "Create CAT" button (which redirects to the *CAT Creation Page*), a text field for the user to input a CAT contract address and a "Use CAT" button (which redirects to the *CAT Page* for the CAT contract input in the text field).
-* **CAT Page**: this page reads from the URL the address of the token contract and allows users to interact with the token contract. This page shows parameters and variables of the token contract such as: current supply, maximum supply, threshold suply, maximum expansion rate, transfer restriction. For owners who have connected their wallets, this page also shows fields and buttons to mint tokens and to do changes in the parameters of the token contract.
+* **CAT Page**: this page reads from the URL the address of the token contract and allows users to interact with the respective token contract. This page shows parameters and variables of the token contract such as: current supply, maximum supply, threshold suply, maximum expansion rate, transfer restriction. For owners who have connected their wallets, this page also shows fields and buttons to mint tokens and to do changes in the parameters of the token contract.
 * **Create CAT Page**: this page shows a form where the user can input the constructor parameters for the desired CAT and a "Deploy CAT" button that calls the factory contract to deploy the CAT with the desired parameters.
-* **My CATs Pages** this page lists all token contracts owned by the user who connected the wallet.
+* **My CATs Page** this page lists all token contracts owned by the user who connected the wallet.
 
 The platform's frontend is built with Next.js, TailwindCSS and ShadCN UI.
 

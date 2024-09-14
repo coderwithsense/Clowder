@@ -9,12 +9,14 @@ const ConnectWallet = () => {
     <div>
       {address ? (
         <div>
-          <Button onClick={disconnect}>
+          <Button onClick={disconnect} className="w-32">
             {address.slice(0, 6)}...{address.slice(-4)}
           </Button>
         </div>
       ) : (
-        <Button onClick={connect}>Connect Wallet</Button>
+        <Button onClick={connect} className="w-32">
+          Connect Wallet
+        </Button>
       )}
     </div>
   );

@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { useWallet } from "@/hooks/WalletConnectProvider";
 import ConnectWallet from "@/components/ConnectWallet";
+import { ModeToggle } from "@/components/darkModeToggle";
 
 export default function Home() {
   const [catAddress, setCatAddress] = useState("");
@@ -31,8 +32,8 @@ export default function Home() {
               Create CAT
             </Button>
             <div className="flex space-x-2">
-                <Input
-                  className="text-black"
+              <Input
+                className=""
                 placeholder="Enter CAT address"
                 value={catAddress}
                 onChange={(e) => setCatAddress(e.target.value)}

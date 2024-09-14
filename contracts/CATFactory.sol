@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: AEL
 pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -11,7 +11,7 @@ contract CATFactory is Ownable {
     Counters.Counter private _tokenIds;
 
     // Mapping from owner address to token addresses
-    mapping(address => address[]) private _ownedTokens;
+    mapping(address => address[]) private _administerableTokens;
 
     // Event emitted when a new CAT is created
     event CATCreated(address indexed owner, address catAddress, uint256 tokenId);
@@ -41,7 +41,7 @@ contract CATFactory is Ownable {
         );
 
         address catAddress = address(newCAT);
-        _ownedTokens[msg.sender].push(catAddress);
+        _administerableTokens[msg.sender].push(catAddress);
 
         emit CATCreated(msg.sender, catAddress, newTokenId);
 
@@ -54,7 +54,7 @@ contract CATFactory is Ownable {
      * @return An array of CAT contract addresses.
      */
     function getOwnedCATs(address owner) public view returns (address[] memory) {
-        return _ownedTokens[owner];
+        return _administerableTokens[owner];
     }
 
     /**

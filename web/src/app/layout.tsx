@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { CatsProvider } from "@/hooks/CatsProvider";
-import {
-  WalletConnectProvider,
-} from "@/hooks/WalletConnectProvider";
+import { WalletConnectProvider } from "@/hooks/WalletConnectProvider";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -33,7 +32,16 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <CatsProvider>
-          <WalletConnectProvider>{children}</WalletConnectProvider>
+          <WalletConnectProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="light"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+            </ThemeProvider>
+          </WalletConnectProvider>
         </CatsProvider>
       </body>
     </html>

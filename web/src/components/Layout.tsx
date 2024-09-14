@@ -5,13 +5,13 @@ import ConnectWallet from "./ConnectWallet";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-secondary text-primary">
       <Head>
         <title>Clowder</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <header className="bg-[#C96868] text-[#FFF4EA] p-4">
+      <header className="p-4">
         <div className="container mx-auto flex justify-between items-center">
           <Link href="/" className="text-2xl font-bold">
             Clowder
@@ -26,17 +26,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               </li>
             </ul>
           </nav>
-          <ConnectWallet />
+          <div className="flex">
+            
+            <ConnectWallet />
+          </div>
         </div>
       </header>
 
-      <main className="flex-grow bg-[#FADFA1] text-[#7EACB5]">{children}</main>
-
-      <footer className="bg-[#C96868] text-[#FFF4EA] p-4">
-        <div className="container mx-auto text-center">
-          &copy; 2024 Clowder. All rights reserved.
-        </div>
-      </footer>
+      <main className="flex-grow">{children}</main>
     </div>
   );
 }

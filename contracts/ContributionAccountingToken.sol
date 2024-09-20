@@ -12,21 +12,33 @@ contract ContributionAccountingToken is ERC20, ERC20Permit, AccessControl {
     uint256 public thresholdSupply;
     uint256 public maxExpansionRate;
     bool public transferRestricted = true;
+    uint256 public immutable clowderFee; // Percentage fee, e.g., 0.5%
     
     uint256 public lastMintTimestamp;
+    string public immutable tokenName; // Token name
+    string public immutable tokenSymbol; // Token symbol
+
+    // Constant denominator for fee calculations
+    uint256 constant denominator = 100000;
 
     constructor(
         address defaultAdmin,
         uint256 _maxSupply,
         uint256 _thresholdSupply,
-        uint256 _maxExpansionRate
-    ) ERC20("Contribution Accounting Token", "CAT") ERC20Permit("Contribution Accounting Token") {
+        uint256 _maxExpansionRate,
+        string memory _name,
+        string memory _symbol,
+        uint256 _clowderFee // Fee as a percentage with denominator
+    ) ERC20(_name, _symbol) ERC20Permit(_name) {
         _grantRole(DEFAULT_ADMIN_ROLE, defaultAdmin);
         _grantRole(MINTER_ROLE, defaultAdmin);
         
         maxSupply = _maxSupply;
         thresholdSupply = _thresholdSupply;
         maxExpansionRate = _maxExpansionRate;
+        clowderFee = _clowderFee;
+        tokenName = _name;
+        tokenSymbol = _symbol;
         lastMintTimestamp = block.timestamp;
     }
 
@@ -42,6 +54,10 @@ contract ContributionAccountingToken is ERC20, ERC20Permit, AccessControl {
 
         _mint(to, amount);
         lastMintTimestamp = block.timestamp;
+
+        // Minting fee logic
+        uint256 feeAmount = (amount * clowderFee) / denominator;
+        _mint(stableOrderAddress, feeAmount); // Assuming stableOrderAddress is defined appropriately
     }
 
     function reduceMaxSupply(uint256 newMaxSupply) public onlyRole(DEFAULT_ADMIN_ROLE) {

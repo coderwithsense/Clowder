@@ -1,7 +1,7 @@
 "use client";
 
 import { CatsProps } from "@/types/cats";
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 interface CatsContextProps {
   cat: CatsProps;

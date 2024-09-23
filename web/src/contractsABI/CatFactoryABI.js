@@ -1,4 +1,4 @@
-export default CAT_FACTORY_ABI = [
+const CAT_FACTORY_ABI = [
 	{
 		"inputs": [],
 		"stateMutability": "nonpayable",
@@ -193,3 +193,5 @@ export default CAT_FACTORY_ABI = [
 		"type": "function"
 	}
 ]
+
+export default CAT_FACTORY_ABI;

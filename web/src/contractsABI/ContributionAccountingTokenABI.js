@@ -1,4 +1,4 @@
-export default CONTRIBUTION_ACCOUNTING_TOKEN_ABI = [
+const CONTRIBUTION_ACCOUNTING_TOKEN_ABI = [
 	{
 		"inputs": [
 			{
@@ -1012,3 +1012,5 @@ export default CONTRIBUTION_ACCOUNTING_TOKEN_ABI = [
 		"type": "function"
 	}
 ]
+
+export default CONTRIBUTION_ACCOUNTING_TOKEN_ABI;

@@ -4,4 +4,6 @@ export interface WalletContextProps {
     balance: string;
     connect: () => void;
     disconnect: () => void;
+    catsContractInstance?: any;
+    catsContractFactoryInstance?: any;
 }

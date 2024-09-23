@@ -4,6 +4,7 @@ import "./globals.css";
 import { CatsProvider } from "@/hooks/CatsProvider";
 import { WalletConnectProvider } from "@/hooks/WalletConnectProvider";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -31,6 +32,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Toaster />
         <CatsProvider>
           <WalletConnectProvider>
             <ThemeProvider

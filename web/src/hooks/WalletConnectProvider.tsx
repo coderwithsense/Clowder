@@ -3,6 +3,9 @@
 import { WalletContextProps } from "@/types/walletContext";
 import detectEthereumProvider from "@metamask/detect-provider";
 import React, { createContext, useState, useEffect } from "react";
+import CAT_FACTORY_ABI from "../contractsABI/CatFactoryABI.js";
+import CONTRIBUTION_ACCOUNTING_TOKEN_ABI from "../contractsABI/ContributionAccountingTokenABI.js";
+import { CATS_FACTORY_ADDRESS } from "../constants.js";
 import Web3 from "web3";
 
 const WalletContext = createContext<WalletContextProps>({
@@ -11,6 +14,8 @@ const WalletContext = createContext<WalletContextProps>({
   balance: "",
   connect: () => {},
   disconnect: () => {},
+  catsContractInstance: null,
+  catsContractFactoryInstance: null,
 });
 
 export function WalletConnectProvider({
@@ -20,6 +25,23 @@ export function WalletConnectProvider({
   const [isLoading, setIsLoading] = useState(false);
   const [balance, setBalance] = useState("");
   const [web3, setWeb3] = useState<Web3 | null>(null);
+  const [catsContractInstance, setCatsContractInstance] = useState<any>(null);
+  const [catsContractFactoryInstance, setCatsContractFactoryInstance] =
+    useState<any>(null);
+
+  const initContracts = async () => {
+    if (!web3) return;
+    const catsContractFactoryInstance = new web3.eth.Contract(
+      CAT_FACTORY_ABI as any,
+      CATS_FACTORY_ADDRESS
+    );
+    setCatsContractFactoryInstance(catsContractFactoryInstance);
+  };
+
+  useEffect(() => {
+    if (!web3) return;
+    initContracts();
+  }, [isLoading]);
 
   useEffect(() => {
     const init = async () => {
@@ -29,7 +51,7 @@ export function WalletConnectProvider({
         setWeb3(web3Instance);
 
         // Listen for account changes
-        (provider as any).on('accountsChanged', async (accounts: string[]) => {
+        (provider as any).on("accountsChanged", async (accounts: string[]) => {
           if (accounts.length > 0) {
             setAddress(accounts[0]);
             const balance = await web3Instance.eth.getBalance(accounts[0]);
@@ -50,7 +72,9 @@ export function WalletConnectProvider({
     if (!web3) return;
     setIsLoading(true);
     try {
-      const accounts = await (web3.currentProvider as any).request({ method: "eth_requestAccounts" });
+      const accounts = await (web3.currentProvider as any).request({
+        method: "eth_requestAccounts",
+      });
       setAddress(accounts[0]);
       const balance = await web3.eth.getBalance(accounts[0]);
       setBalance(web3.utils.fromWei(balance, "ether"));
@@ -74,6 +98,8 @@ export function WalletConnectProvider({
         balance,
         connect,
         disconnect,
+        catsContractInstance,
+        catsContractFactoryInstance,
       }}
     >
       {children}

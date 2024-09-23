@@ -26,7 +26,6 @@ contract CATFactory is Ownable {
      * @param maxExpansionRate The maximum expansion rate for the new CAT.
      * @param name The name of the CAT token.
      * @param symbol The symbol of the CAT token.
-     * @param clowderFee The percentage fee for the CAT token.
      * @return The address of the newly created CAT contract.
      */
     function createCAT(

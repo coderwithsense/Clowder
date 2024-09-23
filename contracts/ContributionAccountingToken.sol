@@ -17,8 +17,8 @@ contract ContributionAccountingToken is ERC20, ERC20Permit, AccessControl {
     address public clowderTreasury = 0x355e559BCA86346B82D58be0460d661DB481E05e; // Address to receive minting fees
     
     uint256 public lastMintTimestamp;
-    string public immutable tokenName; // Token name
-    string public immutable tokenSymbol; // Token symbol
+    string public tokenName; // Token name
+    string public tokenSymbol; // Token symbol
 
     // Constant denominator for fee calculations
     uint256 constant denominator = 100000;
@@ -29,7 +29,7 @@ contract ContributionAccountingToken is ERC20, ERC20Permit, AccessControl {
         uint256 _thresholdSupply,
         uint256 _maxExpansionRate,
         string memory _name,
-        string memory _symbol,
+        string memory _symbol
     ) ERC20(_name, _symbol) ERC20Permit(_name) {
         _grantRole(DEFAULT_ADMIN_ROLE, defaultAdmin);
         _grantRole(MINTER_ROLE, defaultAdmin);

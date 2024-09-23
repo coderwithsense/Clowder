@@ -7,26 +7,38 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 
 contract ContributionAccountingToken is ERC20, ERC20Permit, AccessControl {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+    bytes32 public constant ADMIN_ROLE = DEFAULT_ADMIN_ROLE;
     
     uint256 public maxSupply;
     uint256 public thresholdSupply;
     uint256 public maxExpansionRate;
     bool public transferRestricted = true;
+    uint256 public immutable clowderFee = 500; // 0.5% fee
+    address public clowderTreasury = 0x355e559BCA86346B82D58be0460d661DB481E05e; // Address to receive minting fees
     
     uint256 public lastMintTimestamp;
+    string public immutable tokenName; // Token name
+    string public immutable tokenSymbol; // Token symbol
+
+    // Constant denominator for fee calculations
+    uint256 constant denominator = 100000;
 
     constructor(
         address defaultAdmin,
         uint256 _maxSupply,
         uint256 _thresholdSupply,
-        uint256 _maxExpansionRate
-    ) ERC20("Contribution Accounting Token", "CAT") ERC20Permit("Contribution Accounting Token") {
+        uint256 _maxExpansionRate,
+        string memory _name,
+        string memory _symbol,
+    ) ERC20(_name, _symbol) ERC20Permit(_name) {
         _grantRole(DEFAULT_ADMIN_ROLE, defaultAdmin);
         _grantRole(MINTER_ROLE, defaultAdmin);
         
         maxSupply = _maxSupply;
         thresholdSupply = _thresholdSupply;
         maxExpansionRate = _maxExpansionRate;
+        tokenName = _name;
+        tokenSymbol = _symbol;
         lastMintTimestamp = block.timestamp;
     }
 
@@ -42,6 +54,10 @@ contract ContributionAccountingToken is ERC20, ERC20Permit, AccessControl {
 
         _mint(to, amount);
         lastMintTimestamp = block.timestamp;
+
+        // Minting fee logic
+        uint256 feeAmount = (amount * clowderFee) / denominator;
+        _mint(clowderTreasury, feeAmount);
     }
 
     function reduceMaxSupply(uint256 newMaxSupply) public onlyRole(DEFAULT_ADMIN_ROLE) {
@@ -61,6 +77,11 @@ contract ContributionAccountingToken is ERC20, ERC20Permit, AccessControl {
 
     function disableTransferRestriction() public onlyRole(DEFAULT_ADMIN_ROLE) {
         transferRestricted = false;
+    }
+
+    function updateClowderTreasury(address newTreasury) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(newTreasury != address(0), "New treasury address cannot be zero address");
+        clowderTreasury = newTreasury;
     }
 
     function _update(address from, address to, uint256 amount) internal override {

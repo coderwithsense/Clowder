@@ -34,8 +34,7 @@ contract CATFactory is Ownable {
         uint256 thresholdSupply,
         uint256 maxExpansionRate,
         string memory name,
-        string memory symbol,
-        uint256 clowderFee
+        string memory symbol
     ) public returns (address) {
         _tokenIds.increment();
         uint256 newTokenId = _tokenIds.current();
@@ -46,8 +45,7 @@ contract CATFactory is Ownable {
             thresholdSupply,
             maxExpansionRate,
             name,
-            symbol,
-            clowderFee
+            symbol
         );
 
         address catAddress = address(newCAT);

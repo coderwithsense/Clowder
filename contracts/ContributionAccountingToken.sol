@@ -82,11 +82,6 @@ contract ContributionAccountingToken is ERC20, ERC20Permit, AccessControl {
         transferRestricted = false;
     }
 
-    function updateClowderTreasury(address newTreasury) public onlyRole(DEFAULT_ADMIN_ROLE) {
-        require(newTreasury != address(0), "New treasury address cannot be zero address");
-        clowderTreasury = newTreasury;
-    }
-
     function _update(address from, address to, uint256 amount) internal override {
         if (transferRestricted) {
             require(from == address(0) || to == address(0) || balanceOf(to) > 0, "Transfer restricted to existing token holders");

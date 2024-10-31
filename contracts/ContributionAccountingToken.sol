@@ -13,7 +13,7 @@ contract ContributionAccountingToken is ERC20, ERC20Permit, AccessControl {
     uint256 public thresholdSupply;
     uint256 public maxExpansionRate;
     bool public transferRestricted = true;
-    uint256 public immutable clowderFee = 500; // 0.5% fee
+    uint256 public constant clowderFee = 500; // 0.5% fee
     address public clowderTreasury = 0x355e559BCA86346B82D58be0460d661DB481E05e; // Address to receive minting fees
     
     uint256 public lastMintTimestamp;
@@ -44,20 +44,23 @@ contract ContributionAccountingToken is ERC20, ERC20Permit, AccessControl {
 
     function mint(address to, uint256 amount) public onlyRole(MINTER_ROLE) {
         uint256 currentSupply = totalSupply();
-        require(currentSupply + amount <= maxSupply, "Exceeds maximum supply");
+        
+        // Minting fee calculation
+        uint256 feeAmount = (amount * clowderFee) / denominator;
+        
+        // Perform the actual minting
+        _mint(to, amount);
+        _mint(clowderTreasury, feeAmount);
+        lastMintTimestamp = block.timestamp;
+
+        // Require statements moved after fee calculation and minting
+        require(currentSupply + amount + feeAmount <= maxSupply, "Exceeds maximum supply");
 
         if (currentSupply >= thresholdSupply) {
             uint256 elapsedTime = block.timestamp - lastMintTimestamp;
             uint256 maxMintableAmount = (currentSupply * maxExpansionRate * elapsedTime) / (365 days * 100);
-            require(amount <= maxMintableAmount, "Exceeds maximum expansion rate");
+            require(amount + feeAmount <= maxMintableAmount, "Exceeds maximum expansion rate");
         }
-
-        _mint(to, amount);
-        lastMintTimestamp = block.timestamp;
-
-        // Minting fee logic
-        uint256 feeAmount = (amount * clowderFee) / denominator;
-        _mint(clowderTreasury, feeAmount);
     }
 
     function reduceMaxSupply(uint256 newMaxSupply) public onlyRole(DEFAULT_ADMIN_ROLE) {

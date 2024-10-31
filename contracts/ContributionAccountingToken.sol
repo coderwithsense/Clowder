@@ -97,4 +97,8 @@ contract ContributionAccountingToken is ERC20, ERC20Permit, AccessControl {
     function grantMinterRole(address account) public onlyRole(DEFAULT_ADMIN_ROLE) {
         grantRole(MINTER_ROLE, account);
     }
+
+    function revokeMinterRole(address account) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        revokeRole(MINTER_ROLE, account);
+    }
 }

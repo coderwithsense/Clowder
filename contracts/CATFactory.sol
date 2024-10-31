@@ -3,7 +3,7 @@ pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
-import "./ContributionAccountingToken.sol"; // Make sure this import points to your CAT contract file
+import "./ContributionAccountingToken.sol"; // Ensure this import points to your CAT contract file
 
 contract CATFactory is Ownable {
     using Counters for Counters.Counter;
@@ -11,8 +11,8 @@ contract CATFactory is Ownable {
     Counters.Counter private _tokenIds;
 
     // Mapping from owner address to token addresses
-    mapping(address => address[]) private _administerableTokens;
-    mapping(address => address[]) private _mintableTokens; // New mapping for minter roles
+    mapping(address => address[]) public administerableTokens; // Now public
+    mapping(address => address[]) public mintableTokens; // Now public
 
     // Event emitted when a new CAT is created
     event CATCreated(address indexed owner, address catAddress, uint256 tokenId);
@@ -48,7 +48,7 @@ contract CATFactory is Ownable {
         );
 
         address catAddress = address(newCAT);
-        _administerableTokens[msg.sender].push(catAddress);
+        administerableTokens[msg.sender].push(catAddress);
 
         emit CATCreated(msg.sender, catAddress, newTokenId);
 
@@ -62,27 +62,7 @@ contract CATFactory is Ownable {
      */
     function grantMinterRole(address catAddress, address minter) public onlyOwner {
         ContributionAccountingToken(catAddress).grantMinterRole(minter);
-        _mintableTokens[minter].push(catAddress); // Update mintable tokens mapping
-    }
-
-    /**
-     * @dev Returns an array of CAT addresses owned by the given address.
-     * @param owner The address to query the tokens of.
-     * @return An array of CAT contract addresses.
-     */
-    function getOwnedCATs(address owner) public view returns (address[] memory) {
-        uint256 totalTokens = _administerableTokens[owner].length + _mintableTokens[owner].length;
-        address[] memory result = new address[](totalTokens);
-
-        uint256 index = 0;
-        for (uint256 i = 0; i < _administerableTokens[owner].length; i++) {
-            result[index++] = _administerableTokens[owner][i];
-        }
-        for (uint256 j = 0; j < _mintableTokens[owner].length; j++) {
-            result[index++] = _mintableTokens[owner][j];
-        }
-
-        return result;
+        mintableTokens[minter].push(catAddress); // Update mintable tokens mapping
     }
 
     /**

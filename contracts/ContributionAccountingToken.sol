@@ -14,7 +14,7 @@ contract ContributionAccountingToken is ERC20, ERC20Permit, AccessControl {
     uint256 public maxExpansionRate;
     bool public transferRestricted = true;
     uint256 public constant clowderFee = 500; // 0.5% fee
-    address public clowderTreasury = 0x355e559BCA86346B82D58be0460d661DB481E05e; // Address to receive minting fees
+    address public immutable clowderTreasury = 0x355e559BCA86346B82D58be0460d661DB481E05e; // Address to receive minting fees
     
     uint256 public lastMintTimestamp;
     string public tokenName; // Token name

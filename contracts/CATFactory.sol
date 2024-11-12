@@ -72,4 +72,14 @@ contract CATFactory is Ownable {
     function totalCATs() public view returns (uint256) {
         return _tokenIds.current();
     }
+
+    /**
+     * @dev Retrieves the list of CAT addresses that an address can administer or mint.
+     * @param user The address of the user to check.
+     * @return administeredTokens List of tokens the user administers.
+     * @return mintedTokens List of tokens the user can mint.
+     */
+    function getCatByAddress(address user) public view returns (address[] memory administeredTokens, address[] memory mintedTokens){
+        return (administerableTokens[user], mintableTokens[user]);
+    }
 }
